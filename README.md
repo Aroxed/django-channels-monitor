@@ -1,6 +1,6 @@
 # Django Live Dashboard (SSE branch)
 
-Simple educational example of realtime metrics over Server-Sent Events (no Celery, no WebSocket code).
+Simple educational example of realtime metrics over Server-Sent Events.
 
 ## Metrics
 
