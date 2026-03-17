@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'dashboard',
 ]
 
@@ -121,13 +119,4 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 METRICS_INTERVAL_SECONDS = 1
-DASHBOARD_TRANSPORT = 'ws'
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0')],
-        },
-    },
-}
+DASHBOARD_TRANSPORT = 'sse'

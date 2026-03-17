@@ -1,6 +1,16 @@
+import json
+import time
+
 from django.conf import settings
-from django.http import HttpResponseNotFound
+from django.http import StreamingHttpResponse
 from django.shortcuts import render
+
+from .metrics import (
+    collect_metrics,
+    decrement_connections,
+    get_open_connections,
+    increment_connections,
+)
 
 
 def index(request):
@@ -12,4 +22,20 @@ def index(request):
 
 
 def metrics_events(request):
-    return HttpResponseNotFound("SSE endpoint is enabled only in SSE branch.")
+    def event_stream():
+        increment_connections("sse")
+        try:
+            while True:
+                payload = collect_metrics(open_connections=get_open_connections("sse"))
+                yield f"data: {json.dumps(payload)}\n\n"
+                time.sleep(settings.METRICS_INTERVAL_SECONDS)
+        finally:
+            decrement_connections("sse")
+
+    response = StreamingHttpResponse(
+        streaming_content=event_stream(),
+        content_type="text/event-stream",
+    )
+    response["Cache-Control"] = "no-cache"
+    response["X-Accel-Buffering"] = "no"
+    return response

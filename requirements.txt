@@ -1,4 +1,2 @@
 django
-channels
-channels-redis
 psutil
