@@ -48,8 +48,7 @@
 <body>
   <h1>Django Live Dashboard</h1>
   <div class="meta">
-    Transport: <strong id="transport-label">{{ transport|upper }}</strong> |
-    Update interval: <strong>{{ interval_seconds }}s</strong>
+    Transport: <strong>SSE</strong>
   </div>
   <div class="grid">
     <section class="card">
@@ -61,7 +60,7 @@
       <div id="ram-value" class="value">--%</div>
     </section>
     <section class="card">
-      <div class="label">Open WS/SSE connections</div>
+      <div class="label">Open SSE connections</div>
       <div id="connections-value" class="value">--</div>
     </section>
   </div>
@@ -69,8 +68,6 @@
 
   <script>
     window.DASHBOARD_CONFIG = {
-      transport: "{{ transport }}",
-      wsUrl: "ws://" + window.location.host + "/ws/metrics/",
       sseUrl: "/events/"
     };
   </script>

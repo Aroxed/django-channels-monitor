@@ -14,23 +14,19 @@ from .metrics import (
 
 
 def index(request):
-    context = {
-        "transport": settings.DASHBOARD_TRANSPORT,
-        "interval_seconds": settings.METRICS_INTERVAL_SECONDS,
-    }
-    return render(request, "dashboard/index.html", context)
+    return render(request, "dashboard/index.html")
 
 
 def metrics_events(request):
     def event_stream():
-        increment_connections("sse")
+        increment_connections()
         try:
             while True:
-                payload = collect_metrics(open_connections=get_open_connections("sse"))
+                payload = collect_metrics(open_connections=get_open_connections())
                 yield f"data: {json.dumps(payload)}\n\n"
                 time.sleep(settings.METRICS_INTERVAL_SECONDS)
         finally:
-            decrement_connections("sse")
+            decrement_connections()
 
     response = StreamingHttpResponse(
         streaming_content=event_stream(),

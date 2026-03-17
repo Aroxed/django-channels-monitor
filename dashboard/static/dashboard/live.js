@@ -12,24 +12,6 @@
     statusEl.textContent = `Last update: ${new Date(payload.timestamp).toLocaleTimeString()}`;
   }
 
-  function attachWebSocket() {
-    const socket = new WebSocket(config.wsUrl);
-    socket.onopen = function () {
-      statusEl.textContent = "WebSocket connected.";
-    };
-    socket.onmessage = function (event) {
-      const payload = JSON.parse(event.data);
-      updateUi(payload);
-    };
-    socket.onclose = function () {
-      statusEl.textContent = "WebSocket disconnected. Reconnecting...";
-      setTimeout(attachWebSocket, 1500);
-    };
-    socket.onerror = function () {
-      socket.close();
-    };
-  }
-
   function attachSse() {
     const source = new EventSource(config.sseUrl);
     source.onopen = function () {
@@ -44,9 +26,5 @@
     };
   }
 
-  if (config.transport === "sse") {
-    attachSse();
-  } else {
-    attachWebSocket();
-  }
+  attachSse();
 })();
