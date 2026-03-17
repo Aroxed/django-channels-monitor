@@ -29,24 +29,5 @@
       socket.close();
     };
   }
-
-  function attachSse() {
-    const source = new EventSource(config.sseUrl);
-    source.onopen = function () {
-      statusEl.textContent = "SSE connected.";
-    };
-    source.onmessage = function (event) {
-      const payload = JSON.parse(event.data);
-      updateUi(payload);
-    };
-    source.onerror = function () {
-      statusEl.textContent = "SSE reconnecting...";
-    };
-  }
-
-  if (config.transport === "sse") {
-    attachSse();
-  } else {
-    attachWebSocket();
-  }
+  attachWebSocket();
 })();

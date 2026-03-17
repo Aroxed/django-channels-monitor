@@ -48,8 +48,7 @@
 <body>
   <h1>Django Live Dashboard</h1>
   <div class="meta">
-    Transport: <strong id="transport-label">{{ transport|upper }}</strong> |
-    Update interval: <strong>{{ interval_seconds }}s</strong>
+    Transport: <strong>WebSocket</strong>
   </div>
   <div class="grid">
     <section class="card">
@@ -69,9 +68,7 @@
 
   <script>
     window.DASHBOARD_CONFIG = {
-      transport: "{{ transport }}",
-      wsUrl: "ws://" + window.location.host + "/ws/metrics/",
-      sseUrl: "/events/"
+      wsUrl: "ws://" + window.location.host + "/ws/metrics/"
     };
   </script>
   <script src="{% static 'dashboard/live.js' %}"></script>
