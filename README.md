@@ -1,6 +1,6 @@
 # Django Live Dashboard (WebSocket branch)
 
-Simple educational example of realtime metrics over WebSocket.
+Simple example of realtime metrics over WebSocket.
 
 ## Metrics
 
