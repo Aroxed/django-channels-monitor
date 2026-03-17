@@ -5,12 +5,7 @@ from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
 
-from .metrics import (
-    collect_metrics,
-    decrement_connections,
-    get_open_connections,
-    increment_connections,
-)
+from .metrics import collect_metrics, connections
 
 
 def index(request):
@@ -19,14 +14,14 @@ def index(request):
 
 def metrics_events(request):
     def event_stream():
-        increment_connections()
+        connections.increment()
         try:
             while True:
-                payload = collect_metrics(open_connections=get_open_connections())
+                payload = collect_metrics(open_connections=connections.get())
                 yield f"data: {json.dumps(payload)}\n\n"
                 time.sleep(settings.METRICS_INTERVAL_SECONDS)
         finally:
-            decrement_connections()
+            connections.decrement()
 
     response = StreamingHttpResponse(
         streaming_content=event_stream(),
