@@ -5,30 +5,31 @@ from threading import Lock
 
 import psutil
 
-_OPEN_CONNECTIONS = 0
-_LOCK = Lock()
-
 # Warm-up call prevents first CPU sample from being uninformative.
 psutil.cpu_percent(interval=None)
 
 
-def increment_connections() -> int:
-    global _OPEN_CONNECTIONS
-    with _LOCK:
-        _OPEN_CONNECTIONS += 1
-        return _OPEN_CONNECTIONS
+class ConnectionCounter:
+    def __init__(self) -> None:
+        self._value = 0
+        self._lock = Lock()
+
+    def increment(self) -> int:
+        with self._lock:
+            self._value += 1
+            return self._value
+
+    def decrement(self) -> int:
+        with self._lock:
+            self._value = max(0, self._value - 1)
+            return self._value
+
+    def get(self) -> int:
+        with self._lock:
+            return self._value
 
 
-def decrement_connections() -> int:
-    global _OPEN_CONNECTIONS
-    with _LOCK:
-        _OPEN_CONNECTIONS = max(0, _OPEN_CONNECTIONS - 1)
-        return _OPEN_CONNECTIONS
-
-
-def get_open_connections() -> int:
-    with _LOCK:
-        return _OPEN_CONNECTIONS
+connections = ConnectionCounter()
 
 
 def collect_metrics(open_connections: int) -> dict[str, float | int | str]:

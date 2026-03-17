@@ -2,3 +2,9 @@
 __pycache__/
 *.pyc
 db.sqlite3
+/.idea/django-channels-monitor.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
