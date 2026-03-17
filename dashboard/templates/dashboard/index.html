@@ -1,0 +1,79 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Django Live Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #101625;
+      color: #e6ebf2;
+    }
+    h1 { margin-top: 0; }
+    .meta {
+      margin-bottom: 18px;
+      color: #aab4c7;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #1b2338;
+      border: 1px solid #2f3a56;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .label {
+      color: #9da8bd;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .status {
+      margin-top: 20px;
+      color: #9da8bd;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Django Live Dashboard</h1>
+  <div class="meta">
+    Transport: <strong id="transport-label">{{ transport|upper }}</strong> |
+    Update interval: <strong>{{ interval_seconds }}s</strong>
+  </div>
+  <div class="grid">
+    <section class="card">
+      <div class="label">CPU</div>
+      <div id="cpu-value" class="value">--%</div>
+    </section>
+    <section class="card">
+      <div class="label">RAM</div>
+      <div id="ram-value" class="value">--%</div>
+    </section>
+    <section class="card">
+      <div class="label">Open WS/SSE connections</div>
+      <div id="connections-value" class="value">--</div>
+    </section>
+  </div>
+  <div id="status" class="status">Waiting for first server push...</div>
+
+  <script>
+    window.DASHBOARD_CONFIG = {
+      transport: "{{ transport }}",
+      wsUrl: "ws://" + window.location.host + "/ws/metrics/",
+      sseUrl: "/events/"
+    };
+  </script>
+  <script src="{% static 'dashboard/live.js' %}"></script>
+</body>
+</html>
