@@ -1,6 +1,6 @@
 import asyncio
 
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.layers import get_channel_layer
 from django.conf import settings
 
@@ -44,7 +44,7 @@ async def metrics_publisher_loop():
         await asyncio.sleep(settings.METRICS_INTERVAL_SECONDS)
 
 
-class MetricsConsumer(AsyncWebsocketConsumer):
+class MetricsConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         await self.channel_layer.group_add(GROUP_NAME, self.channel_name)
         await self.accept()
